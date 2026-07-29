@@ -1,0 +1,41 @@
+  <nav class="navbar navbar-expand">
+    <div class="container d-flex justify-content-between align-items-center">
+      <a class="navbar-brand" href="{{ url_for('index') }}">Cine<span>Match</span></a>
+      <div class="d-flex align-items-center">
+        <a href="{{ url_for('index') }}" class="nav-link-custom {% if request.endpoint == 'index' %}active{% endif %}">Search</a>
+        <a href="{{ url_for('genres_index') }}" class="nav-link-custom {% if request.endpoint in ['genres_index', 'genre_browse'] %}active{% endif %}">Genres</a>
+        <a href="{{ url_for('discover') }}" class="nav-link-custom {% if request.endpoint == 'discover' %}active{% endif %}">Discover</a>
+        <a href="{{ url_for('popular') }}" class="nav-link-custom {% if request.endpoint == 'popular' %}active{% endif %}">Popular</a>
+        <a href="{{ url_for('surprise_me') }}" class="nav-link-custom">Surprise Me</a>
+        <a href="{{ url_for('for_you') }}" class="nav-link-custom {% if request.endpoint == 'for_you' %}active{% endif %}">For You</a>
+        <a href="{{ url_for('watchlist_page') }}" class="nav-link-custom {% if request.endpoint == 'watchlist_page' %}active{% endif %}">
+          Watchlist{% if session.get('watchlist') %} <span class="watchlist-badge">{{ session.get('watchlist')|length }}</span>{% endif %}
+        </a>
+        <a href="{{ url_for('analytics') }}" class="nav-link-custom {% if request.endpoint == 'analytics' %}active{% endif %}">Analytics</a>
+        <button type="button" id="themeToggleBtn" class="theme-toggle-btn" title="Toggle dark / light mode" onclick="cineMatchToggleTheme()">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    (function () {
+      // Applied immediately (nav is the first thing in <body>) to avoid a
+      // visible flash of the wrong theme on page load.
+      var saved = localStorage.getItem('cinematch-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+
+    function cineMatchToggleTheme() {
+      var html = document.documentElement;
+      var next = (html.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('cinematch-theme', next);
+      var btn = document.getElementById('themeToggleBtn');
+      if (btn) btn.textContent = next === 'dark' ? '🌙' : '☀️';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var btn = document.getElementById('themeToggleBtn');
+      if (btn) btn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+    });
+  </script>
